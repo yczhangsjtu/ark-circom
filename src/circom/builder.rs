@@ -25,7 +25,8 @@ pub struct CircomConfig<E: Pairing> {
 
 impl<E: Pairing> CircomConfig<E> {
     pub fn new(wtns: impl AsRef<Path>, r1cs: impl AsRef<Path>) -> Result<Self> {
-        let wtns = WitnessCalculator::new(wtns).unwrap();
+        let wtns = WitnessCalculator::new(&wtns)
+            .expect(&format!("Failed to open wtns path: {:?}", wtns.as_ref()));
         let reader = File::open(r1cs)?;
         let r1cs = R1CSFile::new(reader)?.into();
         Ok(Self {
